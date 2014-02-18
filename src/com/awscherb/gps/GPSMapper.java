@@ -110,7 +110,7 @@ public class GPSMapper extends JComponent {
 
         double ax = (dx * WIDTH);
         double ay = (dy * HEIGHT);
-        
+
         // Point has a specific rotation, apply its rotation
         if (g.rotation != 0) {
             CartPT pt = new CartPT(ax, ay, g.label, g.type);
@@ -227,9 +227,9 @@ public class GPSMapper extends JComponent {
                 temp.add(pt);
             }
         }
-        
+
         int size = temp.size() - 1;
-        
+
         CartPT last = temp.get(size);
         CartPT first = temp.get(0);
         last.type = ENDPOINT;
@@ -269,14 +269,9 @@ public class GPSMapper extends JComponent {
 
     /** Paint the points */
     public void paint(Graphics g) {
+        long startTime = System.nanoTime();
         super.paint(g);
         Graphics2D g2 = (Graphics2D)g;
-
-        if (debug) {
-            g2.drawString("Zoom level: " + String.valueOf(scale - 1), 5, 15);
-            g2.drawString(xycoord, 5, 30);
-            g2.drawString("Show paths: " + showPaths, 5, 45);
-        }
 
         g2.setRenderingHint(
                 RenderingHints.KEY_ANTIALIASING,
@@ -359,10 +354,10 @@ public class GPSMapper extends JComponent {
                 }
             }
         }
-        
+
         // Drawing path labels
         for (CartPT pp : this.pathPoints) {
-         
+
             af.setToRotation(Math.toRadians(pp.rotation));
             Font rotated = fo.deriveFont(af);
             if ((!labels && showPaths) || (labels && showPaths)) {
@@ -398,7 +393,20 @@ public class GPSMapper extends JComponent {
                     g2.drawString(pp.label, lx, ly);
                 }
             }    
-            
+
+        }
+
+        long endTime = System.nanoTime();
+        g2.setFont(fo);
+        g2.setColor(Color.black);
+        if (debug) {
+            g2.drawString("Zoom level: " + String.valueOf(scale - 1), 5, 15);
+            g2.drawString(xycoord, 5, 30);
+            g2.drawString("Show paths: " + showPaths, 5, 45);
+            g2.drawString("Show labels: " + labels, 5, 60);
+            g2.drawString(String.valueOf((endTime - startTime)/1000000), 5, 75);
+            g2.drawString("Points on map: " + points.size(), 5, 90);
+            g2.drawString("Line segments: " + lines.size(), 5, 105);
         }
 
     }
