@@ -362,9 +362,18 @@ public class GPSMapper extends JComponent {
         
         // Drawing path labels
         for (CartPT pp : this.pathPoints) {
+         
             af.setToRotation(Math.toRadians(pp.rotation));
             Font rotated = fo.deriveFont(af);
             if ((!labels && showPaths) || (labels && showPaths)) {
+                g2.setColor(Color.cyan);
+                int px = (int)pp.x * scale;
+                int py = (int)pp.y * scale;
+                int ps = (PT_SIZE * ((scale + 1)/2));
+                g2.fillOval(px, py, ps, ps);
+                g2.setColor(Color.black);
+                g2.setStroke(new BasicStroke(1));
+                g2.drawOval(px, py, ps, ps); 
                 g2.setColor(Color.BLACK);
                 float lx = (float)(((pp.x)*scale )  + (PT_SIZE/2)*scale) + 5;
                 float ly = (float)(pp.y)*scale - 5 + (PT_SIZE / 2)*scale;
