@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 
 /**
  * Draws a map based on given GPS coordinates. Lines can be 
@@ -25,7 +26,7 @@ import javax.swing.JComponent;
  * @author Alex Scherb
  * @version 2/18/14
  */
-public class GPSMapper extends JComponent {
+public class GPSMapper extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
@@ -124,6 +125,9 @@ public class GPSMapper extends JComponent {
             this.points.add(pt);
         }
     }
+    
+    private int xscale = 1000;
+    private int yscale = 500;
 
     /** Add all the given points to the map */
     public void addPoints(ArrayList<ArrayList<MapPoint>> input, Color c) {
@@ -131,8 +135,8 @@ public class GPSMapper extends JComponent {
             ArrayList<CartPT> temp = new ArrayList<CartPT>();
 
             for (MapPoint g : l) { // Convert GPS to Cartesian
-                double dx = 2000*(g.lon - center.lon);
-                double dy = 1000*(center.lat - g.lat);
+                double dx = xscale*(g.lon - center.lon);
+                double dy = yscale*(center.lat - g.lat);
 
                 double ax = (dx * WIDTH);
                 double ay = (dy * HEIGHT);
@@ -208,8 +212,8 @@ public class GPSMapper extends JComponent {
         ArrayList<CartPT> temp = new ArrayList<CartPT>();
 
         for (MapPoint m : p) { // Convert GPS to Cartesian
-            double dx = 2000*(m.lon - center.lon);
-            double dy = 1000*(center.lat - m.lat);
+            double dx = xscale*(m.lon - center.lon);
+            double dy = yscale*(center.lat - m.lat);
 
             double ax = (dx * WIDTH);
             double ay = (dy * HEIGHT);
@@ -272,7 +276,7 @@ public class GPSMapper extends JComponent {
         long startTime = System.nanoTime();
         super.paint(g);
         Graphics2D g2 = (Graphics2D)g;
-
+        
         g2.setRenderingHint(
                 RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
