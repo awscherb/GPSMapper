@@ -46,15 +46,13 @@ public class GPSMapper extends JPanel {
     /** Size to draw points */
     private static final int PT_SIZE = 5;
     /** Offset to correctly draw points on line */
-    private static final int PT_OFFSET = ((PT_SIZE / 2) * scale) - 1;
+    private static final int PT_OFFSET = 0;//((PT_SIZE / 2) * scale) - 1;
     /** Width of lines */
     private final int LINE_SIZE = 4;
     /** Color to draw paths */
     private final Color PATH_COLOR = Color.CYAN;
     /** Default rotation for text label */
     private final int ROTATION = -30;
-    /** x,y coordinate string */
-    private String xycoord = "";
     /** Intersection point on a path */
     public static int TRANSFER = 1;
     /** End point of a path */
@@ -90,6 +88,7 @@ public class GPSMapper extends JPanel {
         this.height = height;
         setSize(new Dimension(width, height));
         setVisible(true);
+        setFocusable(true);
         points = new ArrayList<CartPT>();
         lines = new ArrayList<LineSegment>();
         pathPoints = new ArrayList<CartPT>();
@@ -271,7 +270,7 @@ public class GPSMapper extends JPanel {
 
     ///////////////////////////////////////////////////////////////////////////
 
-    /** Paint the points */
+    /** Paint method */
     public void paint(Graphics g) {
         long startTime = System.nanoTime();
         super.paint(g);
@@ -287,12 +286,12 @@ public class GPSMapper extends JPanel {
             for (LineSegment l : this.lines) {
                 g2.setColor(l.color);
                 try {
-                    g2.setStroke(new BasicStroke(LINE_SIZE * ((scale + 1) / 2), 
+                    g2.setStroke(new BasicStroke(LINE_SIZE, 
                             BasicStroke.CAP_ROUND, 
                             BasicStroke.JOIN_ROUND));
                 } catch (IllegalArgumentException iae) { }
-                g2.drawLine((int)l.startX * scale, (int)l.startY * scale, 
-                        (int)l.endX * scale, (int)l.endY * scale);
+                g2.drawLine((int)(l.startX * scale), (int)(l.startY * scale), 
+                        (int)(l.endX * scale), (int)(l.endY * scale));
             } 
         }
 
@@ -303,12 +302,12 @@ public class GPSMapper extends JPanel {
                 for (LineSegment lp : this.paths) {
                     try {
                         g2.setStroke(new BasicStroke(
-                                LINE_SIZE * ((scale + 1) / 2), 
+                                LINE_SIZE, 
                                 BasicStroke.CAP_ROUND, 
                                 BasicStroke.JOIN_ROUND));
                     } catch (IllegalArgumentException iae) { }
-                    g2.drawLine((int)lp.startX * scale, (int)lp.startY * scale, 
-                            (int)lp.endX * scale, (int)lp.endY * scale);
+                    g2.drawLine((int)(lp.startX * scale), (int)(lp.startY * scale), 
+                            (int)(lp.endX * scale), (int)(lp.endY * scale));
                 } 
             }
         }
@@ -321,9 +320,9 @@ public class GPSMapper extends JPanel {
         // Draw the points
         for (CartPT p : this.points) {
             g2.setColor(PT_COLOR);
-            int px = (int)p.x * scale;
-            int py = (int)p.y * scale;
-            int ps = (PT_SIZE * ((scale + 1)/2));
+            int px = (int)((p.x * scale) - (PT_SIZE / 2));
+            int py = (int)((p.y * scale) - (PT_SIZE / 2));
+            int ps = PT_SIZE;
             g2.fillOval(px, py, ps, ps);
             g2.setColor(Color.black);
             g2.setStroke(new BasicStroke(1));
@@ -338,21 +337,21 @@ public class GPSMapper extends JPanel {
                 float ly = (float)(p.y)*scale - 5 + (PT_SIZE / 2)*scale;
                 if (scale > 3) {
                     g2.setFont(rotated);
-                    g2.setColor(Color.BLACK);
-                    g2.drawString(p.label, lx-1, ly);
-                    g2.drawString(p.label, lx+1, ly);
-                    g2.drawString(p.label, lx, ly-1);
-                    g2.drawString(p.label, lx, ly+1);
+//                    g2.setColor(Color.BLACK);
+//                    g2.drawString(p.label, lx-1, ly);
+//                    g2.drawString(p.label, lx+1, ly);
+//                    g2.drawString(p.label, lx, ly-1);
+//                    g2.drawString(p.label, lx, ly+1);
                     g2.setColor(Color.WHITE);
                     g2.drawString(p.label, lx, ly);
                 }
                 else if (p.type == ENDPOINT) {
                     g2.setFont(rotated);
-                    g2.setColor(Color.BLACK);
-                    g2.drawString(p.label, lx-1, ly);
-                    g2.drawString(p.label, lx+1, ly);
-                    g2.drawString(p.label, lx, ly-1);
-                    g2.drawString(p.label, lx, ly+1);
+//                    g2.setColor(Color.BLACK);
+//                    g2.drawString(p.label, lx-1, ly);
+//                    g2.drawString(p.label, lx+1, ly);
+//                    g2.drawString(p.label, lx, ly-1);
+//                    g2.drawString(p.label, lx, ly+1);
                     g2.setColor(Color.WHITE);
                     g2.drawString(p.label, lx, ly);
                 }
@@ -366,16 +365,16 @@ public class GPSMapper extends JPanel {
             Font rotated = fo.deriveFont(af);
             if ((!labels && showPaths) || (labels && showPaths)) {
                 g2.setColor(Color.cyan);
-                int px = (int)pp.x * scale;
-                int py = (int)pp.y * scale;
-                int ps = (PT_SIZE * ((scale + 1)/2));
+                int px = (int)((pp.x * scale) - (PT_SIZE / 2));
+                int py = (int)((pp.y * scale) - (PT_SIZE / 2));
+                int ps = PT_SIZE;
                 g2.fillOval(px, py, ps, ps);
                 g2.setColor(Color.black);
                 g2.setStroke(new BasicStroke(1));
                 g2.drawOval(px, py, ps, ps); 
                 g2.setColor(Color.BLACK);
-                float lx = (float)(((pp.x)*scale )  + (PT_SIZE/2)*scale) + 5;
-                float ly = (float)(pp.y)*scale - 5 + (PT_SIZE / 2)*scale;
+                float lx = (float)((pp.x)*scale)  + 5;
+                float ly = (float)((pp.y)*scale) - 5 ;
                 if (scale > 3) {
                     g2.setFont(rotated);
                     g2.setColor(Color.BLACK);
@@ -405,7 +404,6 @@ public class GPSMapper extends JPanel {
         g2.setColor(Color.black);
         if (debug) {
             g2.drawString("Zoom level: " + String.valueOf(scale - 1), 5, 15);
-            g2.drawString(xycoord, 5, 30);
             g2.drawString("Show paths: " + showPaths, 5, 45);
             g2.drawString("Show labels: " + labels, 5, 60);
             g2.drawString(String.valueOf((endTime - startTime)/1000000), 5, 75);
@@ -427,7 +425,7 @@ public class GPSMapper extends JPanel {
 
         /** Mouse has been pressed */
         public void mousePressed(MouseEvent e) {
-            updateXYString(e);
+            requestFocusInWindow(); // Request focus in the window
             x = e.getX();
             y = e.getY();
         }
@@ -453,15 +451,6 @@ public class GPSMapper extends JPanel {
             repaint(); 
         }
 
-        /** Update the String X, Y coordinates */
-        private void updateXYString(MouseEvent e) {
-            int x = e.getX();
-            int y = e.getY();
-
-            String s = "X: " + x + ", Y: " + y;
-            xycoord = s;
-            repaint();
-        }
     }
 
     /** Key listener */
