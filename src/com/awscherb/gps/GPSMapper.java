@@ -314,6 +314,8 @@ public class GPSMapper extends JPanel {
             // Rotate the font according to point rotation
             af.setToRotation(Math.toRadians(p.rotation));
             Font rotated = fo.deriveFont(af);
+            af.setToRotation(Math.toRadians(ROTATION));
+            Font def = fo.deriveFont(af);
 
             // Labels
             if (labels) {
@@ -330,7 +332,7 @@ public class GPSMapper extends JPanel {
                     g2.drawString(p.label, lx, ly);
                 }
                 else if (p.type == ENDPOINT) {
-                    g2.setFont(rotated);
+                    g2.setFont(def);
                     g2.setColor(Color.BLACK);
                     g2.drawString(p.label, lx-1, ly);
                     g2.drawString(p.label, lx+1, ly);
