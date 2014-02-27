@@ -1,5 +1,10 @@
 package com.awscherb.gps;
 
+/**
+ * Represents a point in the Cartesian coordinate system
+ * @author Alex Scherb
+ *
+ */
 public class CartPT {
     double x;
     double y;
