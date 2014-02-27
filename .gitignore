@@ -1,8 +1,5 @@
 .classpath
 /bin
-/src/com/awscherb/gps/Examples.java
-/src/com/awscherb/gps/MBTAGPS.java
-/src/com/awscherb/gps/MBTAMapper.java
 icon.png
 mbta.txt
 .project
