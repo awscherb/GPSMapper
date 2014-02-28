@@ -36,6 +36,8 @@ public class GPSMapper extends JPanel {
     private static int zoomLevel = 1;
     /** Constant to scale by each time with scale */
     private static final int SCALE_CONSTANT = 2;
+    /** Constant to adjust coordinate by when arrow key is pressed */
+    private static final int KEY_CONSTANT = 10;
     /** Color to draw point circles */
     private final Color PT_COLOR = Color.WHITE;
     /** Color to draw paths */
@@ -196,19 +198,19 @@ public class GPSMapper extends JPanel {
     public void zoom(int s) {
         if (s > 0) {
             for (CartPT c : points) {
-                c.x = c.x*s;
-                c.y = c.y*s;
+                c.x = (c.x*s);
+                c.y = (c.y*s);
 
             }
             for (CartPT c : pathPoints) {
-                c.x = c.x*s;
-                c.y = c.y*s;
+                c.x = (c.x*s);
+                c.y = (c.y*s);
             }
             for (LineSegment l : lines) {
-                l.endX = l.endX*s;
-                l.endY = l.endY*s;
-                l.startX = l.startX*s;
-                l.startY = l.startY*s;
+                l.endX = (l.endX*s);
+                l.endY = (l.endY*s);
+                l.startX = (l.startX*s);
+                l.startY = (l.startY*s);
             }
             for (LineSegment ln : paths) {
                 ln.endX = ln.endX*s;
@@ -504,10 +506,10 @@ public class GPSMapper extends JPanel {
             int key = e.getKeyCode();
 
             // Moving
-            if (key == KeyEvent.VK_UP ) { moveAll(0,10); }
-            if (key == KeyEvent.VK_DOWN) { moveAll(0,-10); }
-            if (key == KeyEvent.VK_LEFT) { moveAll(10,0); }
-            if (key == KeyEvent.VK_RIGHT) { moveAll(-10,0); }
+            if (key == KeyEvent.VK_UP ) { moveAll(0,KEY_CONSTANT); }
+            if (key == KeyEvent.VK_DOWN) { moveAll(0,-KEY_CONSTANT); }
+            if (key == KeyEvent.VK_LEFT) { moveAll(KEY_CONSTANT,0); }
+            if (key == KeyEvent.VK_RIGHT) { moveAll(-KEY_CONSTANT,0); }
 
             // Zooming
             // Zoom in/out
