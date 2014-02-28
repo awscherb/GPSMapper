@@ -32,8 +32,10 @@ public class GPSMapper extends JPanel {
     // Center point actually refers to the top-left position on the map
 
     // Size, canvas info, graphics constants
-    /** Scale of map */
-    private static int scale = 1;
+    /** Zoom level of map */
+    private static int zoomLevel = 1;
+    /** Constant to scale by each time with scale */
+    private static final int SCALE_CONSTANT = 2;
     /** Color to draw point circles */
     private final Color PT_COLOR = Color.WHITE;
     /** Color to draw paths */
@@ -160,32 +162,87 @@ public class GPSMapper extends JPanel {
 
     /** Move all coordinates */
     private void moveAll(int x, int y) {
+
         // Move points
         for (CartPT c : points) {
-            c.x += (x / scale);
-            c.y += (y / scale);
+            c.x += (x);
+            c.y += (y);
+
         }
         // Move path points
         for (CartPT c : pathPoints) {
-            c.x += (x / scale);
-            c.y += (y / scale);
+            c.x += (x);
+            c.y += (y);
         }
         // Move line segments
         for (LineSegment l : lines) {
-            l.endX += (x / scale);
-            l.endY += (y / scale);
-            l.startX += (x / scale);
-            l.startY += (y / scale);
+            l.endX += (x);
+            l.endY += (y);
+            l.startX += (x);
+            l.startY += (y);
         }
         // Move all path segments
         for (LineSegment ln : paths) {
-            ln.endX += (x / scale);
-            ln.endY += (y / scale);
-            ln.startX += (x / scale);
-            ln.startY += (y / scale);
+            ln.endX += (x);
+            ln.endY += (y);
+            ln.startX += (x);
+            ln.startY += (y);
         }
 
         repaint();
+    }
+
+    /** Zoom by the given amount (usually SCALE_CONSTANT) */
+    public void zoom(int s) {
+        if (s > 0) {
+            for (CartPT c : points) {
+                c.x = c.x*s;
+                c.y = c.y*s;
+
+            }
+            for (CartPT c : pathPoints) {
+                c.x = c.x*s;
+                c.y = c.y*s;
+            }
+            for (LineSegment l : lines) {
+                l.endX = l.endX*s;
+                l.endY = l.endY*s;
+                l.startX = l.startX*s;
+                l.startY = l.startY*s;
+            }
+            for (LineSegment ln : paths) {
+                ln.endX = ln.endX*s;
+                ln.endY = ln.endY*s;
+                ln.startX = ln.startX*s;
+                ln.startY = ln.startY*s;
+            }
+        } else {
+            int m = Math.abs(s);
+            for (CartPT c : points) {
+                c.x = c.x/m;
+                c.y = c.y/m;
+
+            }
+            for (CartPT c : pathPoints) {
+                c.x = c.x/m;
+                c.y = c.y/m;
+            }
+            for (LineSegment l : lines) {
+                l.endX = l.endX/m;
+                l.endY = l.endY/m;
+                l.startX = l.startX/m;
+                l.startY = l.startY/m;
+            }
+            for (LineSegment ln : paths) {
+                ln.endX = ln.endX/m;
+                ln.endY = ln.endY/m;
+                ln.startX = ln.startX/m;
+                ln.startY = ln.startY/m;
+            }
+        }
+
+        repaint();
+
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -251,7 +308,7 @@ public class GPSMapper extends JPanel {
 
     /** Set the scale */
     protected void setScale(int s) {
-        scale = s;
+        zoomLevel = s;
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -273,10 +330,10 @@ public class GPSMapper extends JPanel {
                 g2.setStroke(new BasicStroke(LINE_SIZE, 
                         BasicStroke.CAP_ROUND, 
                         BasicStroke.JOIN_ROUND));
-                g2.drawLine((int)(l.startX * scale), 
-                        (int)(l.startY * scale), 
-                        (int)(l.endX * scale), 
-                        (int)(l.endY * scale));
+                g2.drawLine((int)(l.startX), 
+                        (int)(l.startY), 
+                        (int)(l.endX), 
+                        (int)(l.endY));
             } 
         }
 
@@ -289,10 +346,10 @@ public class GPSMapper extends JPanel {
                             LINE_SIZE, 
                             BasicStroke.CAP_ROUND, 
                             BasicStroke.JOIN_ROUND));
-                    g2.drawLine((int)(lp.startX * scale), 
-                            (int)(lp.startY * scale), 
-                            (int)(lp.endX * scale), 
-                            (int)(lp.endY * scale));
+                    g2.drawLine((int)(lp.startX), 
+                            (int)(lp.startY), 
+                            (int)(lp.endX), 
+                            (int)(lp.endY));
                 } 
             }
         }
@@ -304,8 +361,8 @@ public class GPSMapper extends JPanel {
         // Draw the points
         for (CartPT p : this.points) {
             g2.setColor(PT_COLOR);
-            int px = (int)((p.x * scale) - (PT_SIZE / 2));
-            int py = (int)((p.y * scale) - (PT_SIZE / 2));
+            int px = (int)((p.x) - (PT_SIZE / 2));
+            int py = (int)((p.y) - (PT_SIZE / 2));
             g2.fillOval(px, py, PT_SIZE, PT_SIZE);
             g2.setColor(Color.black);
             g2.setStroke(new BasicStroke(1));
@@ -321,7 +378,7 @@ public class GPSMapper extends JPanel {
             if (labels) {
                 float lx = px + 5;
                 float ly = py - 5;
-                if (scale > 4) {
+                if (zoomLevel > 4) {
                     g2.setFont(rotated);
                     g2.setColor(Color.BLACK);
                     g2.drawString(p.label, lx-1, ly);
@@ -351,8 +408,8 @@ public class GPSMapper extends JPanel {
             Font rotated = fo.deriveFont(af);
             if ((!labels && showPaths) || (labels && showPaths)) {
                 g2.setColor(PATH_COLOR);
-                int px = (int)((pp.x * scale) - (PT_SIZE / 2));
-                int py = (int)((pp.y * scale) - (PT_SIZE / 2));
+                int px = (int)((pp.x) - (PT_SIZE / 2));
+                int py = (int)((pp.y) - (PT_SIZE / 2));
                 g2.fillOval(px, py, PT_SIZE, PT_SIZE);
                 g2.setColor(Color.black);
                 g2.setStroke(new BasicStroke(1));
@@ -360,7 +417,7 @@ public class GPSMapper extends JPanel {
                 g2.setColor(Color.BLACK);
                 float lx = px  + 5;
                 float ly = py - 5 ;
-                if (scale > 3) {
+                if (zoomLevel > 3) {
                     g2.setFont(rotated);
                     g2.setColor(Color.BLACK);
                     g2.drawString(pp.label, lx-1, ly);
@@ -387,7 +444,7 @@ public class GPSMapper extends JPanel {
         g2.setFont(fo);
         g2.setColor(LABEL_COLOR);
         if (debug) {
-            g2.drawString("Zoom level: " + String.valueOf(scale - 1), 5, 15);
+            g2.drawString("Zoom level: " + String.valueOf(zoomLevel - 1), 5, 15);
             g2.drawString("Show paths: " + showPaths, 5, 45);
             g2.drawString("Show labels: " + labels, 5, 60);
             g2.drawString(String.valueOf((endTime - startTime)/1000000), 5, 75);
@@ -417,7 +474,6 @@ public class GPSMapper extends JPanel {
             int dx = e.getX() - x;
             int dy = e.getY() - y;
 
-            // Move all coordinates by the change in x, y
             moveAll(dx, dy);
 
             // Update x, y fields to reflect the change in x,y
@@ -428,7 +484,13 @@ public class GPSMapper extends JPanel {
         /** Mouse wheel has been moved */
         public void mouseWheelMoved(MouseWheelEvent e) {
             int i = (e.getUnitsToScroll()/3);
-            scale+=i;
+            if (i > 0) {
+                zoom(SCALE_CONSTANT);
+                zoomLevel++;
+            } else {
+                zoom(-SCALE_CONSTANT);
+                zoomLevel--;
+            }
             repaint(); 
         }
 
@@ -442,43 +504,46 @@ public class GPSMapper extends JPanel {
             int key = e.getKeyCode();
 
             // Moving
-            if (key == KeyEvent.VK_UP ) { moveAll(0,10*scale); }
-            if (key == KeyEvent.VK_DOWN) { moveAll(0,-10*scale); }
-            if (key == KeyEvent.VK_LEFT) { moveAll(10*scale,0); }
-            if (key == KeyEvent.VK_RIGHT) { moveAll(-10*scale,0); }
+            if (key == KeyEvent.VK_UP ) { moveAll(0,10); }
+            if (key == KeyEvent.VK_DOWN) { moveAll(0,-10); }
+            if (key == KeyEvent.VK_LEFT) { moveAll(10,0); }
+            if (key == KeyEvent.VK_RIGHT) { moveAll(-10,0); }
 
             // Zooming
             // Zoom in/out
-            if (key == KeyEvent.VK_EQUALS) { scale++; repaint(); }
-            if (key == KeyEvent.VK_MINUS) { scale--; repaint(); }
-            // Change between zoom levels
-            if (key == KeyEvent.VK_0) { scale = 1; repaint(); }
-            if (key == KeyEvent.VK_1) { scale = 2; repaint(); }
-            if (key == KeyEvent.VK_2) { scale = 3; repaint(); }
-            if (key == KeyEvent.VK_3) { scale = 4; repaint(); }
-            if (key == KeyEvent.VK_4) { scale = 5; repaint(); }
-            if (key == KeyEvent.VK_5) { scale = 6; repaint(); }
-            if (key == KeyEvent.VK_6) { scale = 7; repaint(); }
-            if (key == KeyEvent.VK_7) { scale = 8; repaint(); }
-            if (key == KeyEvent.VK_8) { scale = 9; repaint(); }
-            if (key == KeyEvent.VK_9) { scale = 10; repaint(); }
+            if (key == KeyEvent.VK_EQUALS) { 
+                zoom(SCALE_CONSTANT); 
+                zoomLevel++;
+            }
+            if (key == KeyEvent.VK_MINUS) { 
+                zoom(-SCALE_CONSTANT);
+                zoomLevel--;
+            }
+            if (key == KeyEvent.VK_0) { zoomLevel = 1; }
+            if (key == KeyEvent.VK_1) { zoomLevel = 2; }
+            if (key == KeyEvent.VK_2) { zoomLevel = 3; }
+            if (key == KeyEvent.VK_3) { zoomLevel = 4; }
+            if (key == KeyEvent.VK_4) { zoomLevel = 5; }
+            if (key == KeyEvent.VK_5) { zoomLevel = 6; }
+            if (key == KeyEvent.VK_6) { zoomLevel = 7; }
+            if (key == KeyEvent.VK_7) { zoomLevel = 8; }
+            if (key == KeyEvent.VK_8) { zoomLevel = 9; }
+            if (key == KeyEvent.VK_9) { zoomLevel = 10; }
 
             // Various letter key functions
             // Toggle labels
             if (key == KeyEvent.VK_L) {
                 labels = labels ? false : true;
-                repaint();
             }
             // Toggle debug
             if (key == KeyEvent.VK_D) {
                 debug = debug ? false : true;
-                repaint();
             }
             // Toggle paths
             if (key == KeyEvent.VK_P) {
                 showPaths = showPaths ? false : true;
-                repaint();
             }
+            repaint();
         }
     }
 
