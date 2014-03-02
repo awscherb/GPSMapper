@@ -130,7 +130,6 @@ public class MBTAMapper {
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gui.setResizable(true);
         GPSMapper map = GPSMapper.factory();
-        map.setScale(1);
         map.setDoubleBuffered(true);
         MouseListen ml = map.new MouseListen();
         KeyListen kl = map.new KeyListen();

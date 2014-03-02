@@ -33,11 +33,11 @@ public class GPSMapper extends JPanel {
 
     // Size, canvas info, graphics constants
     /** Zoom level of map */
-    private static int zoomLevel = 1;
+    private int zoomLevel = 1;
     /** Constant to scale by each time with scale */
-    private static final int SCALE_CONSTANT = 2;
+    private final int SCALE_CONSTANT = 2;
     /** Constant to adjust coordinate by when arrow key is pressed */
-    private static final int KEY_CONSTANT = 10;
+    private final int KEY_CONSTANT = 10;
     /** Color to draw point circles */
     private final Color PT_COLOR = Color.WHITE;
     /** Color to draw paths */
@@ -45,7 +45,7 @@ public class GPSMapper extends JPanel {
     /** Color to draw point labels */
     private final Color LABEL_COLOR = Color.WHITE;
     /** Size to draw points */
-    private static final int PT_SIZE = 5;
+    private final int PT_SIZE = 5;
     /** Width of lines */
     private final int LINE_SIZE = 6;
     /** Constant to scale x points on map */
@@ -55,9 +55,9 @@ public class GPSMapper extends JPanel {
     /** Default rotation for text label */
     private final int ROTATION = -30;
     /** Intersection point on a path */
-    public static int TRANSFER = 1;
+    public int TRANSFER = 1;
     /** End point of a path */
-    public static int ENDPOINT = 2;
+    public int ENDPOINT = 2;
 
     /** Center point */
     private MapPoint center;
@@ -196,7 +196,7 @@ public class GPSMapper extends JPanel {
 
     /** Zoom by the given amount (usually SCALE_CONSTANT) */
     public void zoom(int s) {
-        if (s > 0) {
+        if (s > 0) { // s is positive, multiply all points
             for (CartPT c : points) {
                 c.x = (c.x*s);
                 c.y = (c.y*s);
@@ -218,7 +218,7 @@ public class GPSMapper extends JPanel {
                 ln.startX = ln.startX*s;
                 ln.startY = ln.startY*s;
             }
-        } else {
+        } else { // s is negative, divide by absolute value of s
             int m = Math.abs(s);
             for (CartPT c : points) {
                 c.x = c.x/m;
@@ -242,9 +242,7 @@ public class GPSMapper extends JPanel {
                 ln.startY = ln.startY/m;
             }
         }
-
         repaint();
-
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -306,11 +304,6 @@ public class GPSMapper extends JPanel {
     /** Set the center point */
     public void setCenter(MapPoint p) {
         this.center = p;
-    }
-
-    /** Set the scale */
-    protected void setScale(int s) {
-        zoomLevel = s;
     }
 
     ///////////////////////////////////////////////////////////////////////////
