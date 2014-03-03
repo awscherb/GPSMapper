@@ -2,13 +2,9 @@ package com.awscherb.gps;
 
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.GridLayout;
-import java.awt.Panel;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import javax.swing.GroupLayout;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;

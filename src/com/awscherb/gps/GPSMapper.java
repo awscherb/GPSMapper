@@ -2,7 +2,6 @@ package com.awscherb.gps;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -514,6 +513,7 @@ public class GPSMapper extends JPanel {
                 zoom(-SCALE_CONSTANT);
                 zoomLevel--;
             }
+            // Adjust zoom levels 1-10
             if (key == KeyEvent.VK_0) { zoomLevel = 1; }
             if (key == KeyEvent.VK_1) { zoomLevel = 2; }
             if (key == KeyEvent.VK_2) { zoomLevel = 3; }
