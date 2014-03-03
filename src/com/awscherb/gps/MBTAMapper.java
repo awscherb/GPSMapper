@@ -133,6 +133,10 @@ public class MBTAMapper {
         fixRotations();
 
         map.setCenter(MBTAGPS.MBTA_CENTER);
+
+        
+        
+        
         map.addPoints(MBTAGPS.ORANGE_LINE, Color.ORANGE);
         map.addPoints(MBTAGPS.RED_LINE, Color.RED);
         map.addPoints(MBTAGPS.BLUE_LINE, Color.BLUE);
@@ -141,6 +145,7 @@ public class MBTAMapper {
 
         map.addPath(path1);
 
+        
         Container a = gui.getContentPane();
         GroupLayout grid = new GroupLayout(a);
 //        a.setLayout(grid);

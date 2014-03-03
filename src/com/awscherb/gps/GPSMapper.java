@@ -58,8 +58,13 @@ public class GPSMapper extends JPanel {
     /** End point of a path */
     public int ENDPOINT = 2;
 
+    // Point information
     /** Center point */
     private MapPoint center;
+    /** Distance movey from center-x */
+    private int dXc = 0;
+    /** Distance moved from center-y */
+    private int dYc = 0;
 
     // Storing points, lines,
     /** ArrayList of all the points */
@@ -163,6 +168,8 @@ public class GPSMapper extends JPanel {
 
     /** Move all coordinates */
     private void moveAll(int x, int y) {
+        dXc += x;
+        dYc += y;
 
         // Move points
         for (CartPT c : points) {
@@ -502,6 +509,14 @@ public class GPSMapper extends JPanel {
             if (key == KeyEvent.VK_DOWN) { moveAll(0,-KEY_CONSTANT); }
             if (key == KeyEvent.VK_LEFT) { moveAll(KEY_CONSTANT,0); }
             if (key == KeyEvent.VK_RIGHT) { moveAll(-KEY_CONSTANT,0); }
+            
+            // Centering
+            // Go to center
+            if (key == KeyEvent.VK_C) { moveAll(-dXc, -dYc); }
+            // Set center
+            if (key == KeyEvent.VK_S) { 
+                dXc = 0;
+                dYc = 0; }
 
             // Zooming
             // Zoom in/out
