@@ -168,6 +168,7 @@ public class GPSMapper extends JPanel {
 
     /** Move all coordinates */
     private void moveAll(int x, int y) {
+        // Adjust center
         dXc += x;
         dYc += y;
 
@@ -203,6 +204,8 @@ public class GPSMapper extends JPanel {
     /** Zoom by the given amount (usually SCALE_CONSTANT) */
     public void zoom(int s) {
         if (s > 0) { // s is positive, multiply all points
+            dXc = dXc*s;
+            dYc = dYc*s;
             for (CartPT c : points) {
                 c.x = (c.x*s);
                 c.y = (c.y*s);
@@ -226,6 +229,8 @@ public class GPSMapper extends JPanel {
             }
         } else { // s is negative, divide by absolute value of s
             int m = Math.abs(s);
+            dXc = dXc/m;
+            dYc = dYc/m;
             for (CartPT c : points) {
                 c.x = c.x/m;
                 c.y = c.y/m;
