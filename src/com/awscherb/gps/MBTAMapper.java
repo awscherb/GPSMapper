@@ -2,8 +2,11 @@ package com.awscherb.gps;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.lang.reflect.Field;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -18,9 +21,9 @@ public class MBTAMapper {
 
     // Constants
     /** Width of frame */
-    private final int WIDTH = 600;
+    private final int WIDTH = 1280;
     /** Height of frame */
-    private final int HEIGHT = 600;
+    private final int HEIGHT = 800;
 
     ///////////////////////////////////////////////////////////////////////////
     // UI Elements
@@ -143,14 +146,14 @@ public class MBTAMapper {
         map.addPoints(MBTAGPS.GREEN_LINE, Color.GREEN);
         map.setBackground(Color.DARK_GRAY);
 
-        map.addPath(path1);
+//        map.addPath(path1);
 
         
-        Container a = gui.getContentPane();
-        GroupLayout grid = new GroupLayout(a);
+//        Container a = gui.getContentPane();
+//        GroupLayout grid = new GroupLayout(a);
 //        a.setLayout(grid);
-        grid.setAutoCreateContainerGaps(true);
-        grid.setAutoCreateGaps(true);
+//        grid.setAutoCreateContainerGaps(true);
+//        grid.setAutoCreateGaps(true);
 //        grid.setHorizontalGroup(grid.createSequentialGroup()
 //                .addGroup(grid.createParallelGroup(GroupLayout.Alignment.CENTER)
 //                        .addComponent(startLabel)
@@ -167,7 +170,7 @@ public class MBTAMapper {
 //                        .addGroup(grid.createParallelGroup(GroupLayout.Alignment.CENTER)
 //                                .addComponent(startCombo,50,100,200)
 //                                .addComponent(map)));
-//        
+        
 
         //        gui.add(endLbl);
         //        gui.add(startLbl);
@@ -185,6 +188,31 @@ public class MBTAMapper {
 
         map.addKeyListener(kl);
         map.requestFocusInWindow();
+        
+        try {
+//        MBTATrainLocater blueLine = new MBTATrainLocater(
+//                new URL("http://developer.mbta.com/lib/rthr/blue.csv"));
+//        MBTATrainLocater redLine = new MBTATrainLocater(
+//                new URL("http://developer.mbta.com/lib/rthr/red.csv"));
+//        MBTATrainLocater orangeLine = new MBTATrainLocater(
+//                new URL("http://developer.mbta.com/lib/rthr/orange.csv"));
+//        blueLine.init(); 
+//        redLine.init();
+//        orangeLine.init();
+//        
+//        
+//        for (MapPoint pqr : blueLine.trainPoints) {
+//            map.addPoint(pqr);
+//        }
+//        for (MapPoint tuv : redLine.trainPoints) {
+//            map.addPoint(tuv);
+//        }
+//        for (MapPoint wxy : orangeLine.trainPoints) {
+//            map.addPoint(wxy);
+//        }
+        
+        } catch (Exception e) { }
+
         
         gui.setVisible(true);
 

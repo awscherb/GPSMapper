@@ -1,6 +1,8 @@
 package com.awscherb.gps;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -86,7 +88,15 @@ public class Examples {
 
 
     public static void main(String[] arg) {
-        new Examples();
+//        new Examples();
+        try {
+            URL blueURL = new URL("http://developer.mbta.com/lib/rthr/blue.csv");
+            MBTATrainLocater mb = new MBTATrainLocater(blueURL);
+            mb.init();
+
+            System.out.println(mb.trainPoints);
+        } catch (Exception e) { }
+
     }
 
     Examples() {
@@ -94,8 +104,8 @@ public class Examples {
         gui.setSize(500, 394);
         gui.setVisible(true);
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        GPSMapper map = GPSMapper.factory(500, 394);
-//        gui.add(map);
+        GPSMapper map = GPSMapper.factory();
+        gui.add(map);
     }
 
 }

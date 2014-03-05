@@ -66,6 +66,8 @@ public class GPSMapper extends JPanel {
     /** Distance moved from center-y */
     private int dYc = 0;
 
+    private CartPT select;
+
     // Storing points, lines,
     /** ArrayList of all the points */
     private ArrayList<CartPT> points;
@@ -455,6 +457,13 @@ public class GPSMapper extends JPanel {
             g2.drawString("Show labels: " + labels, 5, 60);
             g2.drawString(String.valueOf((endTime - startTime)/1000000), 5, 75);
         }
+        
+        if (select != null && zoomLevel < 4) {
+            g2.setColor(LABEL_COLOR);
+            g2.drawString(select.label, (int)select.x, (int)select.y);
+        }
+//        else if (select == null) { }
+
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -500,6 +509,23 @@ public class GPSMapper extends JPanel {
             repaint(); 
         }
 
+        public void mouseMoved(MouseEvent e) {
+            int x = e.getX();
+            int y = e.getY();
+//            for (CartPT c : points) {
+//                double cXmin = c.x;
+//                double cXmax = cXmin + 30;
+//                double cYmin = c.y;
+//                double cYmax = cYmin + 30;
+//                if ((cXmin < x && x < cXmax) &&
+//                        (cYmin < y && y < cYmax)) {
+//                    select = c;
+//                    out(select.label);
+//                }
+//
+//            }
+        }
+
     }
 
     /** Key listener */
@@ -514,7 +540,7 @@ public class GPSMapper extends JPanel {
             if (key == KeyEvent.VK_DOWN) { moveAll(0,-KEY_CONSTANT); }
             if (key == KeyEvent.VK_LEFT) { moveAll(KEY_CONSTANT,0); }
             if (key == KeyEvent.VK_RIGHT) { moveAll(-KEY_CONSTANT,0); }
-            
+
             // Centering
             // Go to center
             if (key == KeyEvent.VK_C) { moveAll(-dXc, -dYc); }
