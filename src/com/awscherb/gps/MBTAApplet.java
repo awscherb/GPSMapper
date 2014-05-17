@@ -32,7 +32,7 @@ public class MBTAApplet extends JApplet {
         map.addPoints(MBTAGPS.RED_LINE, Color.RED);
         map.addPoints(MBTAGPS.BLUE_LINE, Color.BLUE);
         map.addPoints(MBTAGPS.GREEN_LINE, Color.GREEN);
-        map.setBackground(Color.DARK_GRAY);
+        map.setBackground(Color.WHITE);
         
         Container a = getContentPane();
         a.add(map);

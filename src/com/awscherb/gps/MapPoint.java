@@ -112,6 +112,16 @@ public class MapPoint {
         this.rotation = r;
     }
     
+    /** Get lat */
+    public double getLat() {
+        return this.lat;
+    }
+    
+    /** Get longitude */
+    public double getLon() {
+        return this.lon;
+    }
+    
     /** 
      * Exception to be thrown if we attempt to create a GPSPoint 
      * with an invalid input.
